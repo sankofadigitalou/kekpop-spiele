@@ -2,7 +2,7 @@ import Link from "next/link";
 
 export default function NotFound() {
   return (
-    <div className="min-h-screen bg-kek-cream flex items-center justify-center px-6">
+    <main id="main-content" className="min-h-screen bg-kek-cream flex items-center justify-center px-6">
       <div className="text-center max-w-lg">
         {/* Dice icon */}
         <div className="w-24 h-24 bg-kek-purple/5 rounded-2xl flex items-center justify-center mx-auto mb-8 border-2 border-kek-purple/10">
@@ -30,6 +30,6 @@ export default function NotFound() {
           Zurück zur Startseite
         </Link>
       </div>
-    </div>
+    </main>
   );
 }

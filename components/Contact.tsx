@@ -7,6 +7,7 @@ export default function Contact() {
   const [visible, setVisible] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [submitting, setSubmitting] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -23,6 +24,7 @@ export default function Contact() {
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setSubmitting(true);
+    setError(null);
 
     const form = e.currentTarget;
     const formData = new FormData(form);
@@ -43,10 +45,16 @@ export default function Contact() {
       if (res.ok) {
         setSubmitted(true);
         form.reset();
+      } else {
+        const body = await res.json().catch(() => null);
+        setError(
+          body?.error || "Etwas ist schiefgelaufen. Bitte versuche es erneut."
+        );
       }
     } catch {
-      // Silently handle — form shows success for now until backend is wired
-      setSubmitted(true);
+      setError(
+        "Verbindungsfehler. Bitte prüfe deine Internetverbindung und versuche es erneut."
+      );
     } finally {
       setSubmitting(false);
     }
@@ -299,6 +307,15 @@ export default function Contact() {
                       className="w-full px-4 py-3 bg-kek-cream/50 border border-kek-purple/10 rounded-xl font-body text-kek-dark placeholder:text-kek-dark/30 focus:outline-none focus:ring-2 focus:ring-kek-purple/20 focus:border-kek-purple/30 transition-all resize-none"
                     />
                   </div>
+
+                  {error && (
+                    <div
+                      role="alert"
+                      className="p-4 bg-kek-red/5 border border-kek-red/20 rounded-xl text-kek-red text-sm font-medium"
+                    >
+                      {error}
+                    </div>
+                  )}
 
                   <button
                     type="submit"

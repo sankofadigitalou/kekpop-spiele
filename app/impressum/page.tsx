@@ -41,10 +41,10 @@ export default function Impressum() {
       </header>
 
       {/* Content */}
-      <main className="max-w-4xl mx-auto px-6 py-16">
+      <main id="main-content" className="max-w-4xl mx-auto px-6 py-16">
         <h1 className="font-display text-4xl font-bold mb-8">Impressum</h1>
 
-        <div className="prose prose-lg max-w-none text-kek-dark/70 space-y-6">
+        <div className="max-w-none text-kek-dark/70 space-y-6 leading-relaxed">
           <h2 className="font-display text-2xl font-bold text-kek-dark mt-8">
             Angaben gemäß § 5 TMG
           </h2>

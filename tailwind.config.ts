@@ -25,8 +25,8 @@ const config: Config = {
         },
       },
       fontFamily: {
-        display: ['"Fredoka"', "sans-serif"],
-        body: ['"Inter"', "sans-serif"],
+        display: ["var(--font-fredoka)", "sans-serif"],
+        body: ["var(--font-inter)", "sans-serif"],
       },
       animation: {
         "float-slow": "float 6s ease-in-out infinite",

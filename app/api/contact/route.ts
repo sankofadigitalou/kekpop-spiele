@@ -1,11 +1,26 @@
 import { NextResponse } from "next/server";
+import { Resend } from "resend";
 
 const ALLOWED_SUBJECTS = ["general", "press", "business", "feedback"];
+
+const SUBJECT_LABELS: Record<string, string> = {
+  general: "Allgemeine Anfrage",
+  press: "Presse & Medien",
+  business: "Geschäftliche Anfrage",
+  feedback: "Feedback",
+};
+
+function sanitize(input: string): string {
+  return input.replace(/[<>]/g, "").trim();
+}
 
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    const { name, email, subject, message } = body;
+    const name = sanitize(String(body.name || ""));
+    const email = sanitize(String(body.email || ""));
+    const subject = String(body.subject || "");
+    const message = sanitize(String(body.message || ""));
 
     // Validate required fields
     if (!name || !email || !subject || !message) {
@@ -40,22 +55,31 @@ export async function POST(request: Request) {
       );
     }
 
-    // TODO: Wire up Resend email sending once RESEND_API_KEY is configured
-    // import { Resend } from 'resend';
-    // const resend = new Resend(process.env.RESEND_API_KEY);
-    // await resend.emails.send({
-    //   from: 'Kekpop Spiele <noreply@kekpop.sankofa-digital.ai>',
-    //   to: ['info@kekpop-spiele.de'],
-    //   subject: `[${subject}] Neue Anfrage von ${name}`,
-    //   text: `Name: ${name}\nE-Mail: ${email}\nBetreff: ${subject}\n\nNachricht:\n${message}`,
-    // });
-
-    console.log("Contact form submission:", { name, email, subject, message: message.substring(0, 100) });
+    // Send email via Resend if API key is configured
+    if (process.env.RESEND_API_KEY) {
+      const resend = new Resend(process.env.RESEND_API_KEY);
+      await resend.emails.send({
+        from: "Kekpop Spiele <noreply@kekpop.sankofa-digital.ai>",
+        to: ["info@kekpop-spiele.de"],
+        reply_to: email,
+        subject: `[${SUBJECT_LABELS[subject]}] Neue Anfrage von ${name}`,
+        text: `Name: ${name}\nE-Mail: ${email}\nBetreff: ${SUBJECT_LABELS[subject]}\n\nNachricht:\n${message}`,
+      });
+    } else {
+      // Log as fallback when Resend is not configured
+      console.log("Contact form submission (no RESEND_API_KEY):", {
+        name,
+        email,
+        subject,
+        message: message.substring(0, 100),
+      });
+    }
 
     return NextResponse.json({ success: true });
-  } catch {
+  } catch (err) {
+    console.error("Contact form error:", err);
     return NextResponse.json(
-      { error: "Ein Fehler ist aufgetreten." },
+      { error: "Ein Fehler ist aufgetreten. Bitte versuche es später erneut." },
       { status: 500 }
     );
   }

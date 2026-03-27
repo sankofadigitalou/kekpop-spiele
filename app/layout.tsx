@@ -1,5 +1,18 @@
 import type { Metadata } from "next";
+import { Inter, Fredoka } from "next/font/google";
 import "./globals.css";
+
+const inter = Inter({
+  subsets: ["latin"],
+  variable: "--font-inter",
+  display: "swap",
+});
+
+const fredoka = Fredoka({
+  subsets: ["latin"],
+  variable: "--font-fredoka",
+  display: "swap",
+});
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://kekpop.sankofa-digital.ai"),
@@ -22,6 +35,14 @@ export const metadata: Metadata = {
     type: "website",
     locale: "de_DE",
     siteName: "Kekpop Spiele",
+    images: [
+      {
+        url: "/images/visitenkarte-archenova.jpg",
+        width: 1200,
+        height: 630,
+        alt: "Kekpop Spiele — Arche Nova",
+      },
+    ],
   },
   robots: {
     index: true,
@@ -38,7 +59,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="de">
+    <html lang="de" className={`${inter.variable} ${fredoka.variable}`}>
       <body>
         <a href="#main-content" className="skip-link">
           Zum Inhalt springen

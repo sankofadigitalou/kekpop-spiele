@@ -46,7 +46,7 @@ export default function Founder() {
                   src="/images/mathias-wigge.webp"
                   alt="Mathias Wigge — Game Designer und Gründer von Kekpop Spiele"
                   fill
-                  className="object-cover"
+                  className="object-cover object-[75%_20%]"
                   sizes="(max-width: 768px) 100vw, 50vw"
                 />
                 {/* Gradient Overlay at bottom */}

@@ -1,13 +1,15 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import Image from "next/image";
 
-const reviews = [
+const videoReviews = [
   {
     channel: "Shut Up & Sit Down",
     title: "Ark Nova Review",
     quote: "Phenomenal... It does everything right, this game is a miracle of design.",
     url: "https://www.shutupandsitdown.com/videos/review-ark-nova/",
+    thumbnail: "https://img.youtube.com/vi/ZIhLGcbdWao/hqdefault.jpg",
     lang: "EN",
   },
   {
@@ -15,6 +17,7 @@ const reviews = [
     title: "Ark Nova Review",
     quote: "An incredible game in just about every dimension.",
     url: "https://www.dicetower.com/video/ark-nova-review-oliver-east",
+    thumbnail: "https://img.youtube.com/vi/gMEIhJfPoVo/hqdefault.jpg",
     lang: "EN",
   },
   {
@@ -22,6 +25,7 @@ const reviews = [
     title: "Arche Nova Rezension",
     quote: "Ein bemerkenswertes Spielerlebnis, das immer wieder neu auf den Tisch kommt.",
     url: "https://boardgamegeek.com/video/363635/ark-nova/spiel-doch-mal-arche-nova-brettspiel-rezension-mei",
+    thumbnail: "https://img.youtube.com/vi/0iZ0NfMU6Ks/hqdefault.jpg",
     lang: "DE",
   },
   {
@@ -29,6 +33,7 @@ const reviews = [
     title: "Ark Nova — First Take",
     quote: "A fine breed of strategy game that stands above most competitors.",
     url: "https://www.meeplemountain.com/reviews/ark-nova-first-take/",
+    thumbnail: "https://img.youtube.com/vi/K4xJEVNaR14/hqdefault.jpg",
     lang: "EN",
   },
 ];
@@ -149,49 +154,69 @@ export default function Media() {
           ))}
         </div>
 
-        {/* Reviews Grid */}
+        {/* Video Reviews Grid */}
         <div className="grid md:grid-cols-2 gap-6 mb-16">
-          {reviews.map((review, index) => (
+          {videoReviews.map((review, index) => (
             <a
               key={review.channel}
               href={review.url}
               target="_blank"
               rel="noopener noreferrer"
-              className={`game-card p-8 group border border-kek-purple/5 hover:border-kek-purple/20 transition-all duration-700 ${
+              className={`game-card group border border-kek-purple/5 hover:border-kek-purple/20 overflow-hidden transition-all duration-700 ${
                 visible
                   ? "opacity-100 translate-y-0"
                   : "opacity-0 translate-y-12"
               }`}
               style={{ transitionDelay: `${400 + index * 100}ms` }}
             >
-              <div className="flex items-start justify-between mb-4">
-                <div>
-                  <div className="flex items-center gap-2 mb-1">
-                    <span className="text-xs px-2 py-0.5 bg-kek-purple/5 rounded font-display font-semibold text-kek-purple/60">
-                      {review.lang}
-                    </span>
-                    <span className="font-display font-bold text-kek-dark">
-                      {review.channel}
+              {/* Video Thumbnail */}
+              <div className="relative aspect-video bg-kek-dark/5 overflow-hidden">
+                <Image
+                  src={review.thumbnail}
+                  alt={`${review.channel} — ${review.title}`}
+                  fill
+                  className="object-cover group-hover:scale-105 transition-transform duration-500"
+                  sizes="(max-width: 768px) 100vw, 50vw"
+                  unoptimized
+                />
+                {/* Play Button Overlay */}
+                <div className="absolute inset-0 flex items-center justify-center bg-kek-dark/20 group-hover:bg-kek-dark/10 transition-colors">
+                  <div className="w-16 h-16 bg-white/90 rounded-full flex items-center justify-center shadow-xl group-hover:scale-110 transition-transform">
+                    <svg className="w-7 h-7 text-kek-red ml-1" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                      <path d="M8 5v14l11-7z" />
+                    </svg>
+                  </div>
+                </div>
+                {/* External badge */}
+                <div className="absolute top-3 right-3 px-2 py-1 bg-kek-dark/60 backdrop-blur-sm rounded-md text-white text-xs font-display font-medium flex items-center gap-1">
+                  <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} aria-hidden="true">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 6H5.25A2.25 2.25 0 003 8.25v10.5A2.25 2.25 0 005.25 21h10.5A2.25 2.25 0 0018 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25" />
+                  </svg>
+                  Externes Review
+                </div>
+              </div>
+
+              {/* Review Content */}
+              <div className="p-6">
+                <div className="flex items-start justify-between mb-3">
+                  <div>
+                    <div className="flex items-center gap-2 mb-1">
+                      <span className="text-xs px-2 py-0.5 bg-kek-purple/5 rounded font-display font-semibold text-kek-purple/60">
+                        {review.lang}
+                      </span>
+                      <span className="font-display font-bold text-kek-dark">
+                        {review.channel}
+                      </span>
+                    </div>
+                    <span className="text-sm text-kek-dark/40">
+                      {review.title}
                     </span>
                   </div>
-                  <span className="text-sm text-kek-dark/40">
-                    {review.title}
-                  </span>
                 </div>
-                <svg
-                  className="w-5 h-5 text-kek-dark/20 group-hover:text-kek-purple transition-colors shrink-0 mt-1"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                  strokeWidth={2}
-                  aria-hidden="true"
-                >
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 6H5.25A2.25 2.25 0 003 8.25v10.5A2.25 2.25 0 005.25 21h10.5A2.25 2.25 0 0018 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25" />
-                </svg>
+                <blockquote className="text-kek-dark/70 italic leading-relaxed">
+                  &ldquo;{review.quote}&rdquo;
+                </blockquote>
               </div>
-              <blockquote className="text-kek-dark/70 text-lg italic leading-relaxed">
-                &ldquo;{review.quote}&rdquo;
-              </blockquote>
             </a>
           ))}
         </div>

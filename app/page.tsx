@@ -9,15 +9,17 @@ import Footer from "@/components/Footer";
 
 export default function Home() {
   return (
-    <main id="main-content">
+    <>
       <Header />
-      <Hero />
-      <About />
-      <Games />
-      <Media />
-      <Founder />
-      <Contact />
+      <main id="main-content">
+        <Hero />
+        <About />
+        <Games />
+        <Media />
+        <Founder />
+        <Contact />
+      </main>
       <Footer />
-    </main>
+    </>
   );
 }
