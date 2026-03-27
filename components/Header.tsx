@@ -36,6 +36,7 @@ export default function Header() {
                 viewBox="0 0 24 24"
                 className="w-6 h-6 text-white"
                 fill="currentColor"
+                aria-hidden="true"
               >
                 <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 3c1.1 0 2 .9 2 2s-.9 2-2 2-2-.9-2-2 .9-2 2-2zm0 10c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm-5-5c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm10 0c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2z" />
               </svg>
@@ -66,7 +67,8 @@ export default function Header() {
         <button
           onClick={() => setMenuOpen(!menuOpen)}
           className="md:hidden relative w-10 h-10 flex flex-col items-center justify-center gap-1.5"
-          aria-label="Menü"
+          aria-label={menuOpen ? "Menü schließen" : "Menü öffnen"}
+          aria-expanded={menuOpen}
         >
           <span
             className={`w-6 h-0.5 bg-kek-dark transition-all duration-300 ${

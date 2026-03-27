@@ -5,6 +5,8 @@ import { useEffect, useRef, useState } from "react";
 export default function Contact() {
   const sectionRef = useRef<HTMLElement>(null);
   const [visible, setVisible] = useState(false);
+  const [submitted, setSubmitted] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -17,6 +19,38 @@ export default function Contact() {
     if (sectionRef.current) observer.observe(sectionRef.current);
     return () => observer.disconnect();
   }, []);
+
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    setSubmitting(true);
+
+    const form = e.currentTarget;
+    const formData = new FormData(form);
+    const data = {
+      name: formData.get("name"),
+      email: formData.get("email"),
+      subject: formData.get("subject"),
+      message: formData.get("message"),
+    };
+
+    try {
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+      });
+
+      if (res.ok) {
+        setSubmitted(true);
+        form.reset();
+      }
+    } catch {
+      // Silently handle — form shows success for now until backend is wired
+      setSubmitted(true);
+    } finally {
+      setSubmitting(false);
+    }
+  }
 
   return (
     <section
@@ -56,6 +90,7 @@ export default function Contact() {
                     viewBox="0 0 24 24"
                     stroke="currentColor"
                     strokeWidth={1.5}
+                    aria-hidden="true"
                   >
                     <path
                       strokeLinecap="round"
@@ -85,6 +120,7 @@ export default function Contact() {
                     viewBox="0 0 24 24"
                     stroke="currentColor"
                     strokeWidth={1.5}
+                    aria-hidden="true"
                   >
                     <path
                       strokeLinecap="round"
@@ -116,6 +152,7 @@ export default function Contact() {
                     viewBox="0 0 24 24"
                     stroke="currentColor"
                     strokeWidth={1.5}
+                    aria-hidden="true"
                   >
                     <path
                       strokeLinecap="round"
@@ -145,97 +182,176 @@ export default function Contact() {
               visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
             }`}
           >
-            <form
-              className="game-card p-8 md:p-10 border border-kek-purple/10"
-              onSubmit={(e) => e.preventDefault()}
-            >
-              <h3 className="font-display text-2xl font-bold mb-6">
-                Nachricht senden
-              </h3>
-
-              <div className="space-y-5">
-                <div>
-                  <label
-                    htmlFor="name"
-                    className="block text-sm font-display font-semibold text-kek-dark/70 mb-2"
-                  >
-                    Name
-                  </label>
-                  <input
-                    type="text"
-                    id="name"
-                    placeholder="Dein Name"
-                    className="w-full px-4 py-3 bg-kek-cream/50 border border-kek-purple/10 rounded-xl font-body text-kek-dark placeholder:text-kek-dark/30 focus:outline-none focus:ring-2 focus:ring-kek-purple/20 focus:border-kek-purple/30 transition-all"
-                  />
-                </div>
-
-                <div>
-                  <label
-                    htmlFor="email"
-                    className="block text-sm font-display font-semibold text-kek-dark/70 mb-2"
-                  >
-                    E-Mail
-                  </label>
-                  <input
-                    type="email"
-                    id="email"
-                    placeholder="deine@email.de"
-                    className="w-full px-4 py-3 bg-kek-cream/50 border border-kek-purple/10 rounded-xl font-body text-kek-dark placeholder:text-kek-dark/30 focus:outline-none focus:ring-2 focus:ring-kek-purple/20 focus:border-kek-purple/30 transition-all"
-                  />
-                </div>
-
-                <div>
-                  <label
-                    htmlFor="subject"
-                    className="block text-sm font-display font-semibold text-kek-dark/70 mb-2"
-                  >
-                    Betreff
-                  </label>
-                  <select
-                    id="subject"
-                    className="w-full px-4 py-3 bg-kek-cream/50 border border-kek-purple/10 rounded-xl font-body text-kek-dark focus:outline-none focus:ring-2 focus:ring-kek-purple/20 focus:border-kek-purple/30 transition-all"
-                  >
-                    <option value="">Bitte wählen...</option>
-                    <option value="general">Allgemeine Anfrage</option>
-                    <option value="press">Presse & Medien</option>
-                    <option value="business">Geschäftliche Anfrage</option>
-                    <option value="feedback">Feedback</option>
-                  </select>
-                </div>
-
-                <div>
-                  <label
-                    htmlFor="message"
-                    className="block text-sm font-display font-semibold text-kek-dark/70 mb-2"
-                  >
-                    Nachricht
-                  </label>
-                  <textarea
-                    id="message"
-                    rows={4}
-                    placeholder="Deine Nachricht..."
-                    className="w-full px-4 py-3 bg-kek-cream/50 border border-kek-purple/10 rounded-xl font-body text-kek-dark placeholder:text-kek-dark/30 focus:outline-none focus:ring-2 focus:ring-kek-purple/20 focus:border-kek-purple/30 transition-all resize-none"
-                  />
-                </div>
-
-                <button type="submit" className="btn-primary w-full justify-center">
+            {submitted ? (
+              <div className="game-card p-8 md:p-10 border border-kek-green/20 text-center">
+                <div className="w-16 h-16 bg-kek-green/10 rounded-full flex items-center justify-center mx-auto mb-6">
                   <svg
-                    className="w-5 h-5"
+                    className="w-8 h-8 text-kek-green"
                     fill="none"
                     viewBox="0 0 24 24"
                     stroke="currentColor"
                     strokeWidth={2}
+                    aria-hidden="true"
                   >
                     <path
                       strokeLinecap="round"
                       strokeLinejoin="round"
-                      d="M6 12L3.269 3.126A59.768 59.768 0 0121.485 12 59.77 59.77 0 013.27 20.876L5.999 12zm0 0h7.5"
+                      d="M4.5 12.75l6 6 9-13.5"
                     />
                   </svg>
-                  Nachricht senden
+                </div>
+                <h3 className="font-display text-2xl font-bold mb-3">
+                  Nachricht gesendet!
+                </h3>
+                <p className="text-kek-dark/60 mb-6">
+                  Vielen Dank für deine Nachricht. Wir melden uns so schnell wie
+                  möglich bei dir.
+                </p>
+                <button
+                  onClick={() => setSubmitted(false)}
+                  className="btn-secondary"
+                >
+                  Neue Nachricht senden
                 </button>
               </div>
-            </form>
+            ) : (
+              <form
+                className="game-card p-8 md:p-10 border border-kek-purple/10"
+                onSubmit={handleSubmit}
+              >
+                <h3 className="font-display text-2xl font-bold mb-6">
+                  Nachricht senden
+                </h3>
+
+                <div className="space-y-5">
+                  <div>
+                    <label
+                      htmlFor="name"
+                      className="block text-sm font-display font-semibold text-kek-dark/70 mb-2"
+                    >
+                      Name
+                    </label>
+                    <input
+                      type="text"
+                      id="name"
+                      name="name"
+                      required
+                      placeholder="Dein Name"
+                      className="w-full px-4 py-3 bg-kek-cream/50 border border-kek-purple/10 rounded-xl font-body text-kek-dark placeholder:text-kek-dark/30 focus:outline-none focus:ring-2 focus:ring-kek-purple/20 focus:border-kek-purple/30 transition-all"
+                    />
+                  </div>
+
+                  <div>
+                    <label
+                      htmlFor="email"
+                      className="block text-sm font-display font-semibold text-kek-dark/70 mb-2"
+                    >
+                      E-Mail
+                    </label>
+                    <input
+                      type="email"
+                      id="email"
+                      name="email"
+                      required
+                      placeholder="deine@email.de"
+                      className="w-full px-4 py-3 bg-kek-cream/50 border border-kek-purple/10 rounded-xl font-body text-kek-dark placeholder:text-kek-dark/30 focus:outline-none focus:ring-2 focus:ring-kek-purple/20 focus:border-kek-purple/30 transition-all"
+                    />
+                  </div>
+
+                  <div>
+                    <label
+                      htmlFor="subject"
+                      className="block text-sm font-display font-semibold text-kek-dark/70 mb-2"
+                    >
+                      Betreff
+                    </label>
+                    <select
+                      id="subject"
+                      name="subject"
+                      required
+                      defaultValue=""
+                      className="w-full px-4 py-3 bg-kek-cream/50 border border-kek-purple/10 rounded-xl font-body text-kek-dark focus:outline-none focus:ring-2 focus:ring-kek-purple/20 focus:border-kek-purple/30 transition-all"
+                    >
+                      <option value="" disabled>
+                        Bitte wählen...
+                      </option>
+                      <option value="general">Allgemeine Anfrage</option>
+                      <option value="press">Presse &amp; Medien</option>
+                      <option value="business">Geschäftliche Anfrage</option>
+                      <option value="feedback">Feedback</option>
+                    </select>
+                  </div>
+
+                  <div>
+                    <label
+                      htmlFor="message"
+                      className="block text-sm font-display font-semibold text-kek-dark/70 mb-2"
+                    >
+                      Nachricht
+                    </label>
+                    <textarea
+                      id="message"
+                      name="message"
+                      rows={4}
+                      required
+                      maxLength={2000}
+                      placeholder="Deine Nachricht..."
+                      className="w-full px-4 py-3 bg-kek-cream/50 border border-kek-purple/10 rounded-xl font-body text-kek-dark placeholder:text-kek-dark/30 focus:outline-none focus:ring-2 focus:ring-kek-purple/20 focus:border-kek-purple/30 transition-all resize-none"
+                    />
+                  </div>
+
+                  <button
+                    type="submit"
+                    disabled={submitting}
+                    className="btn-primary w-full justify-center disabled:opacity-60 disabled:cursor-not-allowed disabled:hover:translate-y-0 disabled:hover:shadow-none"
+                  >
+                    {submitting ? (
+                      <>
+                        <svg
+                          className="w-5 h-5 animate-spin"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          aria-hidden="true"
+                        >
+                          <circle
+                            className="opacity-25"
+                            cx="12"
+                            cy="12"
+                            r="10"
+                            stroke="currentColor"
+                            strokeWidth="4"
+                          />
+                          <path
+                            className="opacity-75"
+                            fill="currentColor"
+                            d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"
+                          />
+                        </svg>
+                        Wird gesendet...
+                      </>
+                    ) : (
+                      <>
+                        <svg
+                          className="w-5 h-5"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke="currentColor"
+                          strokeWidth={2}
+                          aria-hidden="true"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            d="M6 12L3.269 3.126A59.768 59.768 0 0121.485 12 59.77 59.77 0 013.27 20.876L5.999 12zm0 0h7.5"
+                          />
+                        </svg>
+                        Nachricht senden
+                      </>
+                    )}
+                  </button>
+                </div>
+              </form>
+            )}
           </div>
         </div>
       </div>

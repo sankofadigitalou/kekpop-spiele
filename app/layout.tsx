@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://kekpop.sankofa-digital.ai"),
   title: "Kekpop Spiele — Brettspiele von Mathias Wigge",
   description:
     "Kekpop Spiele ist das Spieleunternehmen von Game Designer Mathias Wigge, dem Schöpfer des preisgekrönten Brettspiels Arche Nova (Deutscher Spielepreis 2022).",
@@ -22,6 +23,13 @@ export const metadata: Metadata = {
     locale: "de_DE",
     siteName: "Kekpop Spiele",
   },
+  robots: {
+    index: true,
+    follow: true,
+  },
+  alternates: {
+    canonical: "https://kekpop.sankofa-digital.ai",
+  },
 };
 
 export default function RootLayout({
@@ -31,7 +39,12 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="de">
-      <body>{children}</body>
+      <body>
+        <a href="#main-content" className="skip-link">
+          Zum Inhalt springen
+        </a>
+        {children}
+      </body>
     </html>
   );
 }

@@ -2,6 +2,14 @@ import Link from "next/link";
 
 export const metadata = {
   title: "Datenschutz — Kekpop Spiele",
+  description:
+    "Datenschutzerklärung von Kekpop Spiele. Informationen zur Datenverarbeitung.",
+  openGraph: {
+    title: "Datenschutz — Kekpop Spiele",
+    description: "Datenschutzerklärung von Kekpop Spiele.",
+    type: "website" as const,
+    locale: "de_DE",
+  },
 };
 
 export default function Datenschutz() {

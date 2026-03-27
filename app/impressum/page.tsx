@@ -2,6 +2,13 @@ import Link from "next/link";
 
 export const metadata = {
   title: "Impressum — Kekpop Spiele",
+  description: "Impressum und Angaben gemäß § 5 TMG für Kekpop Spiele.",
+  openGraph: {
+    title: "Impressum — Kekpop Spiele",
+    description: "Impressum und Angaben gemäß § 5 TMG für Kekpop Spiele.",
+    type: "website" as const,
+    locale: "de_DE",
+  },
 };
 
 export default function Impressum() {
