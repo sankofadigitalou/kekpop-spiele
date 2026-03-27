@@ -1,0 +1,137 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url("https://fonts.googleapis.com/css2?family=Fredoka:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap");
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply font-body text-kek-dark bg-kek-cream antialiased;
+  }
+
+  ::selection {
+    @apply bg-kek-purple/20 text-kek-purple-dark;
+  }
+}
+
+@layer components {
+  /* Board Game Card Style */
+  .game-card {
+    @apply relative bg-white rounded-2xl overflow-hidden transition-all duration-500;
+    box-shadow:
+      0 4px 6px -1px rgba(124, 58, 237, 0.08),
+      0 2px 4px -2px rgba(124, 58, 237, 0.05);
+  }
+
+  .game-card:hover {
+    box-shadow:
+      0 25px 50px -12px rgba(124, 58, 237, 0.15),
+      0 12px 24px -8px rgba(124, 58, 237, 0.1);
+    transform: translateY(-8px) rotate(-0.5deg);
+  }
+
+  /* Meeple Shape Clip Path */
+  .meeple-shape {
+    clip-path: polygon(
+      50% 0%,
+      35% 30%,
+      0% 40%,
+      15% 70%,
+      5% 100%,
+      35% 100%,
+      35% 75%,
+      50% 65%,
+      65% 75%,
+      65% 100%,
+      95% 100%,
+      85% 70%,
+      100% 40%,
+      65% 30%
+    );
+  }
+
+  /* Hexagon Shape */
+  .hex-shape {
+    clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+  }
+
+  /* Dice Face */
+  .dice {
+    @apply relative w-14 h-14 bg-white rounded-xl border-2 border-kek-purple/20;
+    box-shadow:
+      inset 0 -3px 0 rgba(124, 58, 237, 0.1),
+      0 2px 8px rgba(124, 58, 237, 0.1);
+  }
+
+  .dice-dot {
+    @apply absolute w-2.5 h-2.5 bg-kek-purple rounded-full;
+  }
+
+  /* Section Styling */
+  .section-title {
+    @apply font-display text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight;
+  }
+
+  .section-subtitle {
+    @apply font-body text-lg md:text-xl text-kek-dark/60 max-w-2xl;
+  }
+
+  /* Button Styles */
+  .btn-primary {
+    @apply inline-flex items-center gap-2 px-8 py-4 bg-kek-purple text-white font-display font-semibold
+    rounded-xl text-lg transition-all duration-300 hover:bg-kek-purple-dark hover:shadow-lg
+    hover:shadow-kek-purple/25 hover:-translate-y-0.5 active:translate-y-0;
+  }
+
+  .btn-secondary {
+    @apply inline-flex items-center gap-2 px-8 py-4 bg-white text-kek-purple font-display font-semibold
+    rounded-xl text-lg border-2 border-kek-purple/20 transition-all duration-300
+    hover:border-kek-purple hover:shadow-lg hover:-translate-y-0.5 active:translate-y-0;
+  }
+
+  /* Game Table Gradient */
+  .game-table-bg {
+    background: linear-gradient(135deg, #0F0A1F 0%, #1A1036 30%, #2D1B69 60%, #1A1036 100%);
+  }
+
+  /* Glowing Border */
+  .glow-border {
+    @apply relative;
+  }
+
+  .glow-border::before {
+    content: "";
+    @apply absolute -inset-0.5 rounded-2xl opacity-0 transition-opacity duration-500;
+    background: linear-gradient(135deg, #7C3AED, #F59E0B, #EF4444, #10B981);
+    z-index: -1;
+  }
+
+  .glow-border:hover::before {
+    @apply opacity-100;
+  }
+
+  /* Scroll-triggered animations */
+  .animate-on-scroll {
+    @apply opacity-0 translate-y-8 transition-all duration-700;
+  }
+
+  .animate-on-scroll.visible {
+    @apply opacity-100 translate-y-0;
+  }
+}
+
+@layer utilities {
+  .text-gradient {
+    @apply bg-clip-text text-transparent;
+    background-image: linear-gradient(135deg, #7C3AED 0%, #EC4899 50%, #F59E0B 100%);
+  }
+
+  .text-gradient-purple {
+    @apply bg-clip-text text-transparent;
+    background-image: linear-gradient(135deg, #7C3AED 0%, #A78BFA 100%);
+  }
+}
